@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// User Types
+
+enum Type {
+  retailer
+  organization
+}
+
+// Retailer and Organization
+
+model Users {
+  id          Int      @id @default(autoincrement())
+  name        String
+  owner       String
+  email       String   @unique
+  password    String
+  type        Type     @default(retailer)
+  national_id String
+  country     String
+  license     String
+  address     String
+  longitude   String
+  latitude    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  Blogs    Blogs[]
+  products Products[]
+
+  retailer_product RetailerProduct[]
+
+  orders Orders[]
+}
+
+// Blogs
+
+model Blogs {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String
+  details         String
+  organization_id Int
+  organization    Users    @relation(fields: [organization_id], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Products
+
+model Products {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  detail      String
+  consumption String
+  sideeffects String
+  other       String
+  retailer_id Int
+  retailer    Users    @relation(fields: [retailer_id], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  retailer_product RetailerProduct[]
+
+  OrderedItems OrderedItems[]
+}
+
+model RetailerProduct {
+  id             Int      @id @default(autoincrement())
+  stock          Int
+  wholesaleprice Int
+  price          Int
+  retailer_id    Int
+  product_id     Int
+  retailer       Users    @relation(fields: [retailer_id], references: [id])
+  product        Products @relation(fields: [product_id], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// Orders
+
+model Orders {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  amount      Int
+  retailer_id Int
+  retailer    Users    @relation(fields: [retailer_id], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  OrderedItems OrderedItems[]
+}
+
+model OrderedItems {
+  id         Int      @id @default(autoincrement())
+  quantity   Int
+  price      Int
+  order_id   Int
+  order      Orders   @relation(fields: [order_id], references: [id])
+  product_id Int
+  product    Products @relation(fields: [product_id], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// Chat Bot Data
+
+model ChatBotData {
+  id        Int      @id @default(autoincrement())
+  query     String
+  solution  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
