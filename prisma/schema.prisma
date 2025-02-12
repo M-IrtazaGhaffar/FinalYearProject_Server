@@ -20,6 +20,7 @@ model Users {
   id          Int      @id @default(autoincrement())
   name        String
   owner       String
+  phone       String
   email       String   @unique
   password    String
   type        Type     @default(retailer)
@@ -58,6 +59,7 @@ model Blogs {
 model Products {
   id          Int      @id @default(autoincrement())
   name        String
+  formula     String
   description String
   detail      String
   consumption String
