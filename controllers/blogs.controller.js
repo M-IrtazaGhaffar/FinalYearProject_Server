@@ -13,6 +13,13 @@ exports.createBlog = async (req, res) => {
         details,
         organization_id,
       },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        details: true,
+        organization: false,
+      },
     });
 
     return ApiResponse.success(res, "Blog created successfully", newBlog, 201);
@@ -26,7 +33,24 @@ exports.createBlog = async (req, res) => {
 exports.getAllBlogs = async (req, res) => {
   try {
     const blogs = await prisma.blogs.findMany({
-      include: { organization: true }, // Include organization details if needed
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        details: true,
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            country: true,
+            address: true,
+            longitude: true,
+            latitude: true,
+          },
+        },
+      },
     });
 
     return ApiResponse.success(res, "Blogs retrieved successfully", blogs);
@@ -39,11 +63,28 @@ exports.getAllBlogs = async (req, res) => {
 // Get a single blog by ID
 exports.getBlogById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     const blog = await prisma.blogs.findUnique({
       where: { id: parseInt(id) },
-      include: { organization: true },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        details: true,
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            country: true,
+            address: true,
+            longitude: true,
+            latitude: true,
+          },
+        },
+      },
     });
 
     if (!blog) {
@@ -86,23 +127,23 @@ exports.updateBlog = async (req, res) => {
 };
 
 // Delete a blog by ID
-exports.deleteBlog = async (req, res) => {
-  try {
-    const { id } = req.params;
+// exports.deleteBlog = async (req, res) => {
+//   try {
+//     const { id } = req.params;
 
-    await prisma.blogs.delete({
-      where: { id: parseInt(id) },
-    });
+//     await prisma.blogs.delete({
+//       where: { id: parseInt(id) },
+//     });
 
-    return ApiResponse.success(res, "Blog deleted successfully");
-  } catch (error) {
-    console.error(error);
+//     return ApiResponse.success(res, "Blog deleted successfully");
+//   } catch (error) {
+//     console.error(error);
 
-    if (error.code === "P2025") {
-      // Prisma-specific error for record not found
-      return ApiResponse.notFound(res, "Blog not found");
-    }
+//     if (error.code === "P2025") {
+//       // Prisma-specific error for record not found
+//       return ApiResponse.notFound(res, "Blog not found");
+//     }
 
-    return ApiResponse.error(res, "Error deleting blog");
-  }
-};
+//     return ApiResponse.error(res, "Error deleting blog");
+//   }
+// };

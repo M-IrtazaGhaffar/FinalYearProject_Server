@@ -6,6 +6,7 @@ const port = process.env.PORT || 8000;
 const cors = require("cors");
 const webRouter = require("./routes/web.router");
 const { roleBasedAccess } = require("./middlewares/auth");
+const organizationRouter = require("./routes/organization.router");
 
 // Middlewares
 server.use(express.json({ limit: "100mb" }));
@@ -28,10 +29,13 @@ server.use((err, req, res, next) => {
 // Generate JWT Auth Token
 
 // Routes
-server.use("/", roleBasedAccess(["APP"]), webRouter);
-// server.use("/admin", roleBasedAccess["ADMIN"], chatbotRouter);
+server.use("/api", webRouter);
 // server.use("/retailer", roleBasedAccess["RETAILER"], chatbotRouter);
-// server.use("/organization", roleBasedAccess["ORGANIZATION"], chatbotRouter);
+server.use(
+  "/organization",
+  roleBasedAccess(["ORGANIZATION"]),
+  organizationRouter
+);
 
 // Listening
 server.listen(port, () => {

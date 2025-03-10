@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  app:
+    build: . # Build the Dockerfile in the current directory
+    container_name: advanced_pos_app # Name the container advanced_pos_app
+    ports:
+      - "8000:8000" # Map port 8000 on the host to port 8000 in the container
+    environment:
+      - DATABASE_URL=mysql://root:aXJ0YXphQDIwMDM=@db:3306/advanced_pos?schema=public
+      - PORT=8000
+      - JWT_SECRET=FinalYearProject

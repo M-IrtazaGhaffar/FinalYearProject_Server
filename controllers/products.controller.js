@@ -4,7 +4,15 @@ const ApiResponse = require("../utils/ApiResponse"); // Import your custom ApiRe
 // Create a new product
 exports.createProduct = async (req, res) => {
   try {
-    const { name, description, detail, consumption, sideeffects, other, retailer_id } = req.body;
+    const {
+      name,
+      description,
+      detail,
+      consumption,
+      sideeffects,
+      other,
+      retailer_id,
+    } = req.body;
 
     const newProduct = await prisma.products.create({
       data: {
@@ -18,7 +26,12 @@ exports.createProduct = async (req, res) => {
       },
     });
 
-    return ApiResponse.success(res, "Product created successfully", newProduct, 201);
+    return ApiResponse.success(
+      res,
+      "Product created successfully",
+      newProduct,
+      201
+    );
   } catch (error) {
     console.error(error);
     return ApiResponse.error(res, "Error creating product");
@@ -29,10 +42,31 @@ exports.createProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await prisma.products.findMany({
-      include: { retailer: true }, // Include retailer details if needed
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        detail: true,
+        consumption: true,
+        sideeffects: true,
+        other: true,
+        retailer: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            address: true,
+          },
+        },
+      },
     });
 
-    return ApiResponse.success(res, "Products retrieved successfully", products);
+    return ApiResponse.success(
+      res,
+      "Products retrieved successfully",
+      products
+    );
   } catch (error) {
     console.error(error);
     return ApiResponse.error(res, "Error fetching products");
@@ -42,11 +76,28 @@ exports.getAllProducts = async (req, res) => {
 // Get a single product by ID
 exports.getProductById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     const product = await prisma.products.findUnique({
       where: { id: parseInt(id) },
-      include: { retailer: true }, // Include retailer details if needed
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        detail: true,
+        consumption: true,
+        sideeffects: true,
+        other: true,
+        retailer: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            address: true,
+          },
+        },
+      },
     });
 
     if (!product) {
@@ -64,7 +115,8 @@ exports.getProductById = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, detail, consumption, sideeffects, other } = req.body;
+    const { name, description, detail, consumption, sideeffects, other } =
+      req.body;
 
     const updatedProduct = await prisma.products.update({
       where: { id: parseInt(id) },
@@ -78,7 +130,11 @@ exports.updateProduct = async (req, res) => {
       },
     });
 
-    return ApiResponse.success(res, "Product updated successfully", updatedProduct);
+    return ApiResponse.success(
+      res,
+      "Product updated successfully",
+      updatedProduct
+    );
   } catch (error) {
     console.error(error);
 
@@ -92,23 +148,23 @@ exports.updateProduct = async (req, res) => {
 };
 
 // Delete a product by ID
-exports.deleteProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
+// exports.deleteProduct = async (req, res) => {
+//   try {
+//     const { id } = req.params;
 
-    await prisma.products.delete({
-      where: { id: parseInt(id) },
-    });
+//     await prisma.products.delete({
+//       where: { id: parseInt(id) },
+//     });
 
-    return ApiResponse.success(res, "Product deleted successfully");
-  } catch (error) {
-    console.error(error);
+//     return ApiResponse.success(res, "Product deleted successfully");
+//   } catch (error) {
+//     console.error(error);
 
-    if (error.code === "P2025") {
-      // Prisma-specific error for record not found
-      return ApiResponse.notFound(res, "Product not found");
-    }
+//     if (error.code === "P2025") {
+//       // Prisma-specific error for record not found
+//       return ApiResponse.notFound(res, "Product not found");
+//     }
 
-    return ApiResponse.error(res, "Error deleting product");
-  }
-};
+//     return ApiResponse.error(res, "Error deleting product");
+//   }
+// };
