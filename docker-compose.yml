@@ -2,6 +2,7 @@ version: "3.8"
 services:
   app:
     build: . # Build the Dockerfile in the current directory
+    image: advanced_pos_app:latest
     container_name: advanced_pos_app # Name the container advanced_pos_app
     ports:
       - "8000:8000" # Map port 8000 on the host to port 8000 in the container
