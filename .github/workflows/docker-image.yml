@@ -24,7 +24,7 @@ jobs:
       run: docker compose -f docker-compose.yml build
 
     - name: Tag Docker image
-      run: docker tag advanced_pos_app ${{ secrets.DOCKER_USERNAME }}/advanced_pos_app:latest
+      run: docker tag advanced_pos_app irtazaghaffar/advanced_pos_app:latest
 
     - name: Push Docker image to Docker Hub
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/advanced_pos_app:latest
+      run: docker push irtazaghaffar/advanced_pos_app:latest
