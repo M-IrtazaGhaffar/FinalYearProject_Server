@@ -17,12 +17,12 @@ const { getAllProducts, getProductById } = require("../controllers/products.cont
 const webRouter = express.Router();
 
 webRouter
-  // auth
+  // Auth
   .post("/organization/create", createOrganization)
   .post("/organization/login", organizationLogin)
   .post("/retailer/create", createRetailer)
   .post("/retailer/login", retailerLogin)
-  // public
+  // Public
   .post("/search", searchAll)
   .post("/chatbot/create", createChatbotData)
   .post("/chatbot/get", getAllChatbotData)
