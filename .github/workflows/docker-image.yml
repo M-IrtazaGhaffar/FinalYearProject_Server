@@ -71,4 +71,4 @@ jobs:
     - name: Run Docker container
       run: docker run -d -p 8000:8000 --name advanced_pos_app ${{ secrets.DOCKER_USERNAME }}/advanced_pos_app:latest
     - name: List Docker containers
-      run: docker ps -a
+      run: sudo docker ps -a
