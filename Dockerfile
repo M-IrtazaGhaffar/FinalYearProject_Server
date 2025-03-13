@@ -13,6 +13,14 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Generate the Prisma Client
+RUN npx prisma generate
+
+# Set environment variables
+ENV PORT="8000"
+ENV JWT_SECRET="FinalYearProject"
+ENV DATABASE_URL="mysql://root:aXJ0YXphQDIwMDM=@13.200.127.249:3306/advanced_pos?schema=public"
+
 # Expose the port your app will run on
 EXPOSE 8000
 
