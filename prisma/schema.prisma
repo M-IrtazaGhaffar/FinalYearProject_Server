@@ -45,9 +45,9 @@ model Users {
 
 model Blogs {
   id              Int      @id @default(autoincrement())
-  title           String
-  description     String
-  details         String
+  title           String  @db.LongText
+  description     String   @db.LongText
+  details         String   @db.LongText
   organization_id Int
   organization    Users    @relation(fields: [organization_id], references: [id])
   createdAt       DateTime @default(now())
@@ -58,13 +58,13 @@ model Blogs {
 
 model Products {
   id          Int      @id @default(autoincrement())
-  name        String
-  formula     String
-  description String
-  detail      String
-  consumption String
-  sideeffects String
-  other       String
+  name        String @db.VarChar(255)
+  formula     String @db.VarChar(255)
+  description String @db.LongText
+  detail      String @db.LongText
+  consumption String @db.LongText
+  sideeffects String @db.LongText
+  other       String @db.LongText
   retailer_id Int
   retailer    Users    @relation(fields: [retailer_id], references: [id])
   createdAt   DateTime @default(now())
@@ -92,8 +92,8 @@ model RetailerProduct {
 
 model Orders {
   id          Int      @id @default(autoincrement())
-  name        String
-  email       String
+  name        String @db.VarChar(255)
+  email       String @db.VarChar(255)
   amount      Int
   retailer_id Int
   retailer    Users    @relation(fields: [retailer_id], references: [id])
@@ -119,8 +119,8 @@ model OrderedItems {
 
 model ChatBotData {
   id        Int      @id @default(autoincrement())
-  query     String
-  solution  String
+  query     String @db.LongText
+  solution  String @db.LongText
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

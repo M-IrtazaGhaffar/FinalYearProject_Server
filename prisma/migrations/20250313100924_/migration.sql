@@ -1,0 +1,19 @@
+-- AlterTable
+ALTER TABLE `Blogs` MODIFY `title` LONGTEXT NOT NULL;
+
+-- AlterTable
+ALTER TABLE `ChatBotData` MODIFY `query` LONGTEXT NOT NULL,
+    MODIFY `solution` LONGTEXT NOT NULL;
+
+-- AlterTable
+ALTER TABLE `Orders` MODIFY `name` VARCHAR(255) NOT NULL,
+    MODIFY `email` VARCHAR(255) NOT NULL;
+
+-- AlterTable
+ALTER TABLE `Products` MODIFY `name` VARCHAR(255) NOT NULL,
+    MODIFY `formula` VARCHAR(255) NOT NULL,
+    MODIFY `description` LONGTEXT NOT NULL,
+    MODIFY `detail` LONGTEXT NOT NULL,
+    MODIFY `consumption` LONGTEXT NOT NULL,
+    MODIFY `sideeffects` LONGTEXT NOT NULL,
+    MODIFY `other` LONGTEXT NOT NULL;

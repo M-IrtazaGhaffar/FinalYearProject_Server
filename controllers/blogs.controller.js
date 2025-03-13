@@ -101,7 +101,7 @@ exports.getBlogById = async (req, res) => {
 // Update a blog by ID
 exports.updateBlog = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
     const { title, description, details } = req.body;
 
     const updatedBlog = await prisma.blogs.update({
