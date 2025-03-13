@@ -43,6 +43,11 @@ jobs:
       uses: actions/checkout@v4
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
+      with:
+          driver: docker
+          install: false
+          use: true
+          cleanup: true
     - name: Login to Docker Hub
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
