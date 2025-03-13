@@ -53,6 +53,8 @@ jobs:
           exit 1
         fi
         docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+    - name: List Docker containers
+      run: docker ps -a
     - name: Pull Docker image from Docker Hub
       run: docker pull ${{ secrets.DOCKER_USERNAME }}/advanced_pos_app:latest
     - name: Stop and remove existing Docker container
@@ -64,4 +66,4 @@ jobs:
     - name: Run Docker container
       run: docker run -d -p 8000:8000 --name advanced_pos_app ${{ secrets.DOCKER_USERNAME }}/advanced_pos_app:latest
     - name: List Docker containers
-      run: docker ps
+      run: docker ps -a
