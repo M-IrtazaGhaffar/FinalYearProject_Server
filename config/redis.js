@@ -23,6 +23,9 @@ const reciptQueue =  new Queue('recipt-queue', {
     }
 })
 
+console.log('123');
+
+
 // const chatbotWorker = new Worker('chatbot-queue', async job => {
 //     console.log('Processing job', job.id, job.data)
 //     return 'done'
