@@ -111,7 +111,7 @@ exports.getProductById = async (req, res) => {
 // Update a product by ID
 exports.updateProduct = async (req, res) => {
   try {
-    const { id, name, description, detail, consumption, sideeffects, other } =
+    const { id, name, formula, description, detail, consumption, sideeffects, other } =
       req.body;
 
       await prisma.products.update({
@@ -119,6 +119,7 @@ exports.updateProduct = async (req, res) => {
       data: {
         name,
         description,
+        formula,
         detail,
         consumption,
         sideeffects,
