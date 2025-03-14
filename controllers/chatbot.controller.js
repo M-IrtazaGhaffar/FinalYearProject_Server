@@ -6,14 +6,10 @@ const ApiResponse = require("../utils/ApiResponse"); // Import the ApiResponse u
 exports.createChatbotData = async (req, res) => {
   try {
     const { query, solution } = req.body;
-    const newData = await prisma.chatBotData.create({
+    await prisma.chatBotData.create({
       data: { query, solution },
     });
-    return ApiResponse.success(
-      res,
-      "Chatbot data created successfully!",
-      newData
-    );
+    return ApiResponse.success(res, "Chatbot data created successfully!");
   } catch (error) {
     return ApiResponse.error(res, "Error creating chatbot data", 500);
   }
@@ -54,14 +50,14 @@ exports.getChatbotDataById = async (req, res) => {
 };
 
 // Delete chatbot data by ID
-exports.deleteChatbotData = async (req, res) => {
-  try {
-    const { id } = req.body;
-    const deletedData = await prisma.chatBotData.delete({
-      where: { id: parseInt(id, 10) },
-    });
-    return ApiResponse.success(res, "Chatbot data deleted successfully!");
-  } catch (error) {
-    return ApiResponse.error(res, "Error deleting chatbot data", 500);
-  }
-};
+// exports.deleteChatbotData = async (req, res) => {
+//   try {
+//     const { id } = req.body;
+//     const deletedData = await prisma.chatBotData.delete({
+//       where: { id: parseInt(id, 10) },
+//     });
+//     return ApiResponse.success(res, "Chatbot data deleted successfully!");
+//   } catch (error) {
+//     return ApiResponse.error(res, "Error deleting chatbot data", 500);
+//   }
+// };

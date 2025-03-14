@@ -26,12 +26,7 @@ exports.createProduct = async (req, res) => {
       },
     });
 
-    return ApiResponse.success(
-      res,
-      "Product created successfully",
-      newProduct,
-      201
-    );
+    return ApiResponse.success(res, "Product created successfully");
   } catch (error) {
     console.error(error);
     return ApiResponse.error(res, "Error creating product");
@@ -114,7 +109,7 @@ exports.getProductById = async (req, res) => {
 // Update a product by ID
 exports.updateProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
     const { name, description, detail, consumption, sideeffects, other } =
       req.body;
 
@@ -130,14 +125,8 @@ exports.updateProduct = async (req, res) => {
       },
     });
 
-    return ApiResponse.success(
-      res,
-      "Product updated successfully",
-      updatedProduct
-    );
+    return ApiResponse.success(res, "Product updated successfully");
   } catch (error) {
-    console.error(error);
-
     if (error.code === "P2025") {
       // Prisma-specific error for record not found
       return ApiResponse.notFound(res, "Product not found");
@@ -168,3 +157,42 @@ exports.updateProduct = async (req, res) => {
 //     return ApiResponse.error(res, "Error deleting product");
 //   }
 // };
+
+exports.addRetailerProduct = async (req, res) => {
+  try {
+    const { stock, wholesaleprice, price, product_id, retailer_id } = req.body;
+    await prisma.retailerProduct.create({
+      data: {
+        stock,
+        wholesaleprice,
+        price,
+        retailer_id,
+        product_id,
+      },
+    });
+    return ApiResponse.success(res, "Product Added Successfully");
+  } catch (error) {
+    console.error(error);
+    return ApiResponse.error(res, "Error adding retailer product", 500);
+  }
+};
+
+exports.updateRetailProduct = async (req, res) => {
+  try {
+    const { stock, wholesaleprice, price, product_id } = req.body;
+    await prisma.retailerProduct.update({
+      where: { id: product_id },
+      data: {
+        stock,
+        wholesaleprice,
+        price,
+      },
+    });
+  } catch (error) {
+    if (error.code === "P2025") {
+      // Prisma-specific error for record not found
+      return ApiResponse.notFound(res, "Product not found");
+    }
+    return ApiResponse.error(res, "Error updating retailer product", 500);
+  }
+};

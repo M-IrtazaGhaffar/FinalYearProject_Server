@@ -53,10 +53,7 @@ exports.createRetailer = async (req, res) => {
       newRetailer.role
     );
 
-    return ApiResponse.success(res, "Retailer created successfully!", {
-      ...newRetailer,
-      token,
-    });
+    return ApiResponse.success(res, "Retailer created successfully!", token);
   } catch (error) {
     return ApiResponse.error(res, "Error creating retailer", 500);
   }
@@ -152,11 +149,9 @@ exports.getRetailerById = async (req, res) => {
 // Update a retailer by ID
 exports.updateRetailer = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
     const {
       name,
-      email,
-      password,
       owner,
       phone,
       national_id,
@@ -167,15 +162,10 @@ exports.updateRetailer = async (req, res) => {
       latitude,
     } = req.body;
 
-    // Hash the new password if provided
-    const hashedPassword = password ? await hashPassword(password) : undefined;
-
-    const updatedRetailer = await prisma.users.update({
+    await prisma.users.update({
       where: { id: parseInt(id, 10), type: "retailer" },
       data: {
         name,
-        email,
-        password: hashedPassword,
         owner,
         phone,
         national_id,
@@ -186,12 +176,12 @@ exports.updateRetailer = async (req, res) => {
         latitude,
       },
     });
-    return ApiResponse.success(
-      res,
-      "Retailer updated successfully!",
-      updatedRetailer
-    );
+    return ApiResponse.success(res, "Retailer updated successfully!");
   } catch (error) {
+    if (error.code === "P2025") {
+      // Prisma-specific error for record not found
+      return ApiResponse.notFound(res, "Product not found");
+    }
     return ApiResponse.error(res, "Error updating retailer", 500);
   }
 };

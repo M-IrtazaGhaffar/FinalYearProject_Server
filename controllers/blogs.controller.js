@@ -6,7 +6,7 @@ exports.createBlog = async (req, res) => {
   try {
     const { title, description, details, organization_id } = req.body;
 
-    const newBlog = await prisma.blogs.create({
+    await prisma.blogs.create({
       data: {
         title,
         description,
@@ -22,7 +22,7 @@ exports.createBlog = async (req, res) => {
       },
     });
 
-    return ApiResponse.success(res, "Blog created successfully", newBlog, 201);
+    return ApiResponse.success(res, "Blog created successfully");
   } catch (error) {
     console.error(error);
     return ApiResponse.error(res, "Error creating blog");
@@ -104,7 +104,7 @@ exports.updateBlog = async (req, res) => {
     const { id } = req.body;
     const { title, description, details } = req.body;
 
-    const updatedBlog = await prisma.blogs.update({
+    await prisma.blogs.update({
       where: { id: parseInt(id) },
       data: {
         title,
@@ -113,10 +113,8 @@ exports.updateBlog = async (req, res) => {
       },
     });
 
-    return ApiResponse.success(res, "Blog updated successfully", updatedBlog);
+    return ApiResponse.success(res, "Blog updated successfully");
   } catch (error) {
-    console.error(error);
-
     if (error.code === "P2025") {
       // Prisma-specific error for record not found
       return ApiResponse.notFound(res, "Blog not found");

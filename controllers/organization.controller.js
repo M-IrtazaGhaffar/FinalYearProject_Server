@@ -54,10 +54,11 @@ exports.createOrganization = async (req, res) => {
       newOrganization.role
     );
 
-    return ApiResponse.success(res, "Organization created successfully!", {
-      ...newOrganization,
-      token,
-    });
+    return ApiResponse.success(
+      res,
+      "Organization created successfully!",
+      token
+    );
   } catch (error) {
     return ApiResponse.error(res, "Error creating organization", 500);
   }
@@ -179,7 +180,7 @@ exports.updateOrganization = async (req, res) => {
     // Hash the new password if provided
     const hashedPassword = password ? await hashPassword(password) : undefined;
 
-    const updatedOrganization = await prisma.users.update({
+    await prisma.users.update({
       where: { id: parseInt(id, 10), type: "organization" },
       data: {
         name,
@@ -195,11 +196,7 @@ exports.updateOrganization = async (req, res) => {
         latitude,
       },
     });
-    return ApiResponse.success(
-      res,
-      "Organization updated successfully!",
-      updatedOrganization
-    );
+    return ApiResponse.success(res, "Organization updated successfully!");
   } catch (error) {
     return ApiResponse.error(res, "Error updating organization", 500);
   }
