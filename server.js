@@ -2,7 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const server = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT;
 const cors = require("cors");
 const webRouter = require("./routes/web.router");
 const { roleBasedAccess } = require("./middlewares/auth");
