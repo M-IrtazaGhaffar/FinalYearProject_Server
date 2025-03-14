@@ -51,7 +51,7 @@ exports.createOrganization = async (req, res) => {
     const token = generateToken(
       newOrganization.id,
       newOrganization.email,
-      newOrganization.role
+      newOrganization.type
     );
 
     return ApiResponse.success(
@@ -88,13 +88,13 @@ exports.organizationLogin = async (req, res) => {
       return ApiResponse.error(res, "Invalid credentials", 401);
     }
 
-    delete organization.password;
+    delete organization.password;    
 
     // Generate a JWT for the organization
     const token = generateToken(
       organization.id,
       organization.email,
-      organization.role
+      organization.type
     );
 
     return ApiResponse.success(res, "Organization logged in successfully!", {
@@ -162,11 +162,9 @@ exports.getOrganizationById = async (req, res) => {
 // Update an organization by ID
 exports.updateOrganization = async (req, res) => {
   try {
-    const { id } = req.params;
     const {
+      id,
       name,
-      email,
-      password,
       owner,
       phone,
       national_id,
@@ -177,15 +175,10 @@ exports.updateOrganization = async (req, res) => {
       latitude,
     } = req.body;
 
-    // Hash the new password if provided
-    const hashedPassword = password ? await hashPassword(password) : undefined;
-
     await prisma.users.update({
       where: { id: parseInt(id, 10), type: "organization" },
       data: {
         name,
-        email,
-        password: hashedPassword,
         owner,
         phone,
         national_id,
@@ -198,6 +191,10 @@ exports.updateOrganization = async (req, res) => {
     });
     return ApiResponse.success(res, "Organization updated successfully!");
   } catch (error) {
+    if (error.code === "P2025") {
+      // Prisma-specific error for record not found
+      return ApiResponse.notFound(res, "Organization not found");
+    }
     return ApiResponse.error(res, "Error updating organization", 500);
   }
 };

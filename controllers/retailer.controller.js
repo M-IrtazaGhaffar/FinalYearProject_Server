@@ -50,7 +50,7 @@ exports.createRetailer = async (req, res) => {
     const token = generateToken(
       newRetailer.id,
       newRetailer.email,
-      newRetailer.role
+      newRetailer.type
     );
 
     return ApiResponse.success(res, "Retailer created successfully!", token);
@@ -82,7 +82,7 @@ exports.retailerLogin = async (req, res) => {
     delete retailer.password;
 
     // Generate a JWT for the retailer
-    const token = generateToken(retailer.id, retailer.email, retailer.role);
+    const token = generateToken(retailer.id, retailer.email, retailer.type);
 
     return ApiResponse.success(res, "Retailer logged in successfully!", {
       ...retailer,

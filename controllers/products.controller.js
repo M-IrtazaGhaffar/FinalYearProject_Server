@@ -7,6 +7,7 @@ exports.createProduct = async (req, res) => {
     const {
       name,
       description,
+      formula,
       detail,
       consumption,
       sideeffects,
@@ -14,7 +15,7 @@ exports.createProduct = async (req, res) => {
       retailer_id,
     } = req.body;
 
-    const newProduct = await prisma.products.create({
+    await prisma.products.create({
       data: {
         name,
         description,
@@ -22,6 +23,7 @@ exports.createProduct = async (req, res) => {
         consumption,
         sideeffects,
         other,
+        formula,
         retailer_id,
       },
     });
@@ -109,11 +111,10 @@ exports.getProductById = async (req, res) => {
 // Update a product by ID
 exports.updateProduct = async (req, res) => {
   try {
-    const { id } = req.body;
-    const { name, description, detail, consumption, sideeffects, other } =
+    const { id, name, description, detail, consumption, sideeffects, other } =
       req.body;
 
-    const updatedProduct = await prisma.products.update({
+      await prisma.products.update({
       where: { id: parseInt(id) },
       data: {
         name,

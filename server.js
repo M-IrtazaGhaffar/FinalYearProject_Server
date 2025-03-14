@@ -33,7 +33,7 @@ server.use("/api", webRouter);
 // server.use("/retailer", roleBasedAccess["RETAILER"], chatbotRouter);
 server.use(
   "/organization",
-  roleBasedAccess(["ORGANIZATION"]),
+  roleBasedAccess(["organization"]),
   organizationRouter
 );
 
